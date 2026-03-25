@@ -2,7 +2,7 @@ streamlit==1.35.0
 transformers==4.41.2
 torch
 sentence-transformers==2.7.0
-faiss-cpu==1.7.4
+faiss-cpu==1.13.2
 pillow
 pytesseract
 pdf2image
