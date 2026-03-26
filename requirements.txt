@@ -1,5 +1,5 @@
 streamlit
-transformers==4.41.2
+transformers
 torch
 sentence-transformers
 faiss-cpu
