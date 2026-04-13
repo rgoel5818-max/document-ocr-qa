@@ -28,6 +28,7 @@ def load_models():
         device=0 if torch.cuda.is_available() else -1
     )
     return embedder, qa
+embedder, qa_pipeline = load_models()
 
 # ---------------- OCR ----------------
 
