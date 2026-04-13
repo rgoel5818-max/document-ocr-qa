@@ -29,6 +29,8 @@ def load_models():
     )
     return embedder, qa
 
+embedder, qa_pipeline = load_models()  
+
 # ---------------- OCR ----------------
 
 def ocr_image(img):
