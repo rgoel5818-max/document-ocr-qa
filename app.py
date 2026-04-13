@@ -5,7 +5,7 @@ from pdf2image import convert_from_bytes
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
-from transformers import pipeline
+from transformers import AutoModelForQuestionAnswering, AutoTokenizer, pipeline
 import torch
 
 
@@ -16,17 +16,18 @@ st.set_page_config(page_title="Document OCR + QA", layout="wide")
 @st.cache_resource
 def load_models():
     embedder = SentenceTransformer("all-MiniLM-L6-v2")
-
+    
+    model_name = "deepset/roberta-base-squad2"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForQuestionAnswering.from_pretrained(model_name)
+    
     qa = pipeline(
         "question-answering",
-        model="deepset/roberta-base-squad2",
+        model=model,
+        tokenizer=tokenizer,
         device=0 if torch.cuda.is_available() else -1
     )
-
     return embedder, qa
-
-
-embedder, qa_pipeline = load_models()
 
 # ---------------- OCR ----------------
 
