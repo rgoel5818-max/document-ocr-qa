@@ -59,16 +59,14 @@ def chunk_text(text, chunk_size=350, overlap=50):
 
 # ---------------- Vector Store ----------------
 
-def build_faiss(chunks):
+def build_faiss(chunks, embedder):
     embeddings = embedder.encode(chunks)
     dim = embeddings.shape[1]
-
     index = faiss.IndexFlatL2(dim)
     index.add(np.array(embeddings))
-
     return index
 
-def retrieve(question, chunks, index, k=5):
+def retrieve(question, chunks, index, embedder, k=5):
     q_emb = embedder.encode([question])
     D, I = index.search(np.array(q_emb), k)
     return [chunks[i] for i in I[0]]
@@ -104,7 +102,7 @@ if uploaded:
 
     with st.spinner("Building knowledge base..."):
         chunks = chunk_text(raw_text)
-        index = build_faiss(chunks)
+        index = build_faiss(chunks, embedder)
 
     st.success("Document indexed successfully!")
 
@@ -113,7 +111,7 @@ if uploaded:
     if question:
 
         with st.spinner("Thinking..."):
-            docs = retrieve(question, chunks, index)
+            docs = retrieve(question, chunks, index, embedder)
             context = "\n".join(docs)
             answer = answer_question(context, question)
 
